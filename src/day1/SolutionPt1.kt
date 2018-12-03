@@ -1,4 +1,6 @@
-class Solution {
+package day1
+
+class SolutionPt1 {
     companion object {
         /**
          * Assuming well-formed, non-empty number input.
