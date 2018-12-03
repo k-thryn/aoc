@@ -1,5 +1,5 @@
 # [Kotlin](https://github.com/JetBrains/kotlin/blob/master/.gitignore)
-./idea
+.idea/
 *.iml
 .DS_Store
 .idea/shelf
