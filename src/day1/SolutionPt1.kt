@@ -1,18 +1,11 @@
 package day1
 
-class SolutionPt1 {
-    companion object {
-        /**
-         * Assuming well-formed, non-empty number input.
-         */
-        @JvmStatic fun main(vararg args: String) {
-            var sum = 0
-            var line = readLine()
-            while (line != null && !line.isEmpty()) {
-                sum += line!!.toInt()
-                line = readLine()
-            }
-            println(sum)
-        }
+fun main(vararg args: String) {
+    var sum = 0
+    var line = readLine()
+    while (line != null && !line.isEmpty()) {
+        sum += line!!.toInt()
+        line = readLine()
     }
+    println(sum)
 }
