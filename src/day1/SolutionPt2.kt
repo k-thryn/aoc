@@ -2,12 +2,12 @@ package day1
 
 fun main(vararg args: String) {
     var sum = 0
-    var sums = HashSet<Int>()
-    var nums = ArrayList<Int>()
+    val sums = HashSet<Int>()
+    val nums = ArrayList<Int>()
 
     var line = readLine()
     while (line != null && !line.isEmpty()) {
-        nums.add(line!!.toInt())
+        nums.add(line.toInt())
         line = readLine()
     }
 
