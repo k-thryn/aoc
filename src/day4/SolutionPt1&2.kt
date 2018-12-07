@@ -11,11 +11,45 @@ fun main(vararg args: String) {
         lines.add(line)
         line = readLine()
     }
-    findSleepiestGuard(lines)
+    if (args.isNotEmpty() && args[0] == "strategy1") {
+        findSleepiestGuard(lines)
+    } else {
+        findSleepiestMinute(lines)
+    }
 }
 
-fun findSleepiestGuard(lines: ArrayList<String>) {
-    val guards = HashMap<Int, Guard>() // Id, Guard
+fun findSleepiestGuard(lines: List<String>) {
+    val entries = parseEntries(lines)
+    val guards = processGuards(entries)
+
+    var longestSleeping = Pair(0, Guard()) // (id, Guard)
+    for (id in guards.keys) {
+        if (guards[id]!!.minutesAsleep > longestSleeping.second.minutesAsleep) {
+            longestSleeping = Pair(id, guards[id]!!)
+        }
+    }
+    println(longestSleeping.first * longestSleeping.second.sleepiestMinute())
+}
+
+fun findSleepiestMinute(lines: List<String>) {
+    val entries = parseEntries(lines)
+    val guards = processGuards(entries)
+
+    var sleepiestGuard = 0 //id
+    var maxFrequency = 0
+    for ((id, guard) in guards) {
+        var sleepiestMinuteFreq = guard.sleepiestMinute(true)
+        if (sleepiestMinuteFreq > maxFrequency) {
+            maxFrequency = sleepiestMinuteFreq
+            sleepiestGuard = id
+        }
+    }
+
+    println(sleepiestGuard * guards[sleepiestGuard]!!.sleepiestMinute())
+
+}
+
+private fun parseEntries(lines: List<String>): List<Entry> {
     val entries = ArrayList<Entry>()
     for (line in lines) {
         val timeNote = line.split("] ".toRegex())
@@ -24,7 +58,11 @@ fun findSleepiestGuard(lines: ArrayList<String>) {
     }
 
     entries.sort()
+    return entries
+}
 
+private fun processGuards(entries: List<Entry>): Map<Int, Guard> { // <Id, Guard>
+    val guards = HashMap<Int, Guard>() // Id, Guard
     var currentId: Int = -1 // guards must have positive ids
     var sleepingSince: Calendar? = null
 
@@ -45,14 +83,7 @@ fun findSleepiestGuard(lines: ArrayList<String>) {
             }
         }
     }
-
-    var longestSleeping = Pair(0, Guard()) // (id, Guard)
-    for (id in guards.keys) {
-        if (guards[id]!!.minutesAsleep > longestSleeping.second.minutesAsleep) {
-            longestSleeping = Pair(id, guards[id]!!)
-        }
-    }
-    println(longestSleeping.first * longestSleeping.second.sleepiestMinute())
+    return guards
 }
 
 class Guard {
@@ -72,14 +103,19 @@ class Guard {
         }
     }
 
-    fun sleepiestMinute(): Int {
+    fun sleepiestMinute(returnFrequency: Boolean = false): Int {
         var currentMax = 0
         var maxMinute = 0
+        var maxFrequency = 0
         for ((minute, frequency) in sleepyMinutes) {
             if (frequency > currentMax) {
                 currentMax = frequency
                 maxMinute = minute
+                maxFrequency = frequency
             }
+        }
+        if (returnFrequency) {
+            return maxFrequency
         }
         return maxMinute
     }
