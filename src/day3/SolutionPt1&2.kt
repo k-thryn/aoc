@@ -67,11 +67,8 @@ class Canvas {
                     break
                 }
             }
-            if (isClean) {
-                return id
-            } else {
-                isClean = true
-            }
+            if (isClean) return id
+            isClean = true
         }
         return -1 // not found
     }
